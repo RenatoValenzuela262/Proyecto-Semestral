@@ -1,36 +1,33 @@
 package com.proyecto.springboot.backend.springboot_backend.entities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="usuario")
+@Table(name = "usuarios")
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long rut;
     private String nombre, correo, contrasenia;
-    
+
     public Usuario() {
     }
 
-    public Usuario(Long id, String nombre, String correo, String contrasenia) {
-        this.id = id;
+    public Usuario(Long rut, String nombre, String correo, String contrasenia) {
+        this.rut = rut;
         this.nombre = nombre;
         this.correo = correo;
         this.contrasenia = contrasenia;
     }
 
-    public Long getId() {
-        return id;
+    public Long getRut() {
+        return rut;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRut(Long rut) {
+        this.rut = rut;
     }
 
     public String getNombre() {
@@ -56,6 +53,4 @@ public class Usuario {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
-
-
 }

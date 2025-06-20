@@ -9,9 +9,9 @@ public interface UsuarioService {
 
     List<Usuario> findByAll();
 
-    Optional<Usuario> findById(Long id);
+    Optional<Usuario> findByRut(Long rut);
 
-    Usuario save(Usuario usuarioexistente);
+    Usuario save(Usuario usuarioExistente);
 
     Optional<Usuario> delete(Usuario unUsuario);
 }

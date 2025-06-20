@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
 @RestController
 @RequestMapping("api/usuarios")
 public class UsuarioController {
@@ -28,48 +26,46 @@ public class UsuarioController {
     private UsuarioService service;
     
     @GetMapping
-    public List<Usuario> List(){
+    public List<Usuario> listar() {
         return service.findByAll();
     }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<?> verUsuario(@PathVariable Long id){
-        Optional<Usuario> usuarioOptional = service.findById(id);
-        if (usuarioOptional.isPresent()){
-            return ResponseEntity.ok(usuarioOptional.orElseThrow());
+    @GetMapping("/{rut}")
+    public ResponseEntity<?> verUsuario(@PathVariable Long rut) {
+        Optional<Usuario> usuarioOptional = service.findByRut(rut);
+        if (usuarioOptional.isPresent()) {
+            return ResponseEntity.ok(usuarioOptional.get());
         }
         return ResponseEntity.notFound().build();
     }
     
     @PostMapping
-    public ResponseEntity<Usuario> crear(@RequestBody Usuario unUsuario){
+    public ResponseEntity<Usuario> crear(@RequestBody Usuario unUsuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unUsuario));
     }
 
-    @PutMapping
-    public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody Usuario unUsuario){
-        Optional<Usuario> usuarioOptional = service.findById(id);
-        if (usuarioOptional.isPresent()){
-            Usuario usuarioexistente = usuarioOptional.get();
-            usuarioexistente.setNombre(unUsuario.getNombre());
-            usuarioexistente.setCorreo(unUsuario.getCorreo());
-            usuarioexistente.setContrasenia(unUsuario.getContrasenia());
-            Usuario usuariomodificado = service.save(usuarioexistente);
-            return ResponseEntity.ok(usuariomodificado);
+    @PutMapping("/{rut}")
+    public ResponseEntity<?> modificar(@PathVariable Long rut, @RequestBody Usuario unUsuario) {
+        Optional<Usuario> usuarioOptional = service.findByRut(rut);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuarioExistente = usuarioOptional.get();
+            usuarioExistente.setNombre(unUsuario.getNombre());
+            usuarioExistente.setCorreo(unUsuario.getCorreo());
+            usuarioExistente.setContrasenia(unUsuario.getContrasenia());
+            Usuario usuarioModificado = service.save(usuarioExistente);
+            return ResponseEntity.ok(usuarioModificado);
         }
         return ResponseEntity.notFound().build();
     }
     
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id){
+    @DeleteMapping("/{rut}")
+    public ResponseEntity<?> eliminar(@PathVariable Long rut) {
         Usuario unUsuario = new Usuario();
-        unUsuario.setId(id);
+        unUsuario.setRut(rut);
         Optional<Usuario> usuarioOptional = service.delete(unUsuario);
-        if(usuarioOptional.isPresent()){
-            return ResponseEntity.ok(usuarioOptional.orElseThrow());
+        if (usuarioOptional.isPresent()) {
+            return ResponseEntity.ok(usuarioOptional.get());
         }
         return ResponseEntity.notFound().build();
     }
-
-
 }
