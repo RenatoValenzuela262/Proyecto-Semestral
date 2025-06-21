@@ -38,7 +38,7 @@ public class IncidenciaServiceImpl implements IncidenciaService {
     @Transactional
     public Optional<Incidencia> delete(Incidencia unaIncidencia){
         Optional<Incidencia> incidenciaOptional = repository.findById(unaIncidencia.getId());
-        incidenciaOptional.ifPresent(IncidenciaDb ->{
+        incidenciaOptional.ifPresent(incidenciaDb ->{
             repository.delete(unaIncidencia);
         });
         return incidenciaOptional;
