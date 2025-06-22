@@ -19,6 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.proyecto.springboot.backend.springboot_backend.entities.Curso;
 import com.proyecto.springboot.backend.springboot_backend.services.CursoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+
+@Tag(name = "Cursos", description = "Operaciones relacionadas con Cursos")
 @RestController
 @RequestMapping("api/cursos")
 public class CursoController {
@@ -26,10 +35,20 @@ public class CursoController {
     @Autowired
     private CursoService service;
 
+    @Operation(summary = "Obtener lista de cursos", description = "Devuelve todos los cursos disponibles")
+    @ApiResponse(responseCode = "200", description = "Lista de cursos retornada correctamente",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = Curso.class)))
     @GetMapping
     public List<Curso> List(){
         return service.findByAll();
     }
+    @Operation(summary = "Obtener curso por ID", description = "Obtiene el detalle de un curso especifico")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Curso encontrado",
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = Curso.class))),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<?> verCurso(@PathVariable Long id){
         Optional<Curso> cursoOptional = service.findById(id);
@@ -39,11 +58,22 @@ public class CursoController {
         return ResponseEntity.notFound().build();
     }
 
+
+
+    @Operation(summary = "Crear un nuevo curso", description = "Crea un curso con los datos proporcionados")
+    @ApiResponse(responseCode = "201", description = "Curso creado correctamente",
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = Curso.class)))
     @PostMapping
     public ResponseEntity<Curso> crear(@RequestBody Curso unCurso){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(unCurso));
     }
 
+    @Operation(summary = "Actualizar curso", description = "Actualiza la información de un curso existente")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Curso actualizado correctamente",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Curso.class))),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     @PutMapping
     public ResponseEntity<?> modificar(@PathVariable Long id, @RequestBody Curso unCurso){
         Optional<Curso> cursoOptional = service.findById(id);
@@ -59,6 +89,11 @@ public class CursoController {
 
     }
 
+    @Operation(summary = "Eliminar curso", description = "Elimina un curso por su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Curso eliminado correctamente"),
+        @ApiResponse(responseCode = "404", description = "Curso no encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id){
         Curso unCurso = new Curso();
