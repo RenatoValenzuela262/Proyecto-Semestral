@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.proyecto.springboot.backend.springboot_backend.entities.Usuario;
 import com.proyecto.springboot.backend.springboot_backend.repository.UsuarioRepository;
 
-
-
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
@@ -26,8 +24,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Usuario> findById(Long id) {
-        return repository.findById(id);
+    public Optional<Usuario> findByRut(Long rut) {
+        return repository.findById(rut);
     }
 
     @Override
@@ -39,11 +37,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public Optional<Usuario> delete(Usuario unUsuario) {
-        Optional<Usuario> usuarioOptional = repository.findById(unUsuario.getId());
+        Optional<Usuario> usuarioOptional = repository.findById(unUsuario.getRut());
         usuarioOptional.ifPresent(usuarioDb -> {
             repository.delete(unUsuario);
         });
         return usuarioOptional;
     }
-
-}           
+}
